@@ -1,4 +1,4 @@
 //adds a new attribute address to a document in the collection school
-db.school.update(
+db.school.updateMany(
 { $set: { address: “972 Mission street”} }
 );
