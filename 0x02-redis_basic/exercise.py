@@ -39,6 +39,22 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+@staticmethod
+def replay(method: Callable) -> None:
+    """
+    Display the history of calls to a particular function.
+    """
+    redis_instance = method.__self__._redis
+    method_name = method.__qualname__
+    inputs = redis_instance.lrange(f"{method_name}:inputs", 0, -1)
+    outputs = redis_instance.lrange(f"{method_name}:outputs", 0, -1)
+    print(f"{method.__qualname__} was called {len(inputs)} times:")
+    for inp, out in zip(inputs, outputs):
+        inp = inp.decode("utf-8")
+        out = out.decode("utf-8")
+        print(f"{method.__qualname__}(*{inp}) -> {out}")
+
+
 class Cache:
     """ Class for writing strings to Redis"""
     def __init__(self):
@@ -79,18 +95,3 @@ class Cache:
         Retrieve an int from Redis
         """
         return self.get(key, fn=int)
-
-    @staticmethod
-    def replay(method: Callable) -> None:
-        """
-        Display the history of calls to a particular function.
-        """
-        redis_instance = method.__self__._redis
-        method_name = method.__qualname__
-        inputs = redis_instance.lrange(f"{method_name}:inputs", 0, -1)
-        outputs = redis_instance.lrange(f"{method_name}:outputs", 0, -1)
-        print(f"{method.__qualname__} was called {len(inputs)} times:")
-        for inp, out in zip(inputs, outputs):
-            inp = inp.decode("utf-8")
-            out = out.decode("utf-8")
-            print(f"{method.__qualname__}(*{inp}) -> {out}")
