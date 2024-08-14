@@ -44,11 +44,13 @@ def replay(method: Callable):
     """
     Display the history of calls to a particular function.
     """
-    redis_instance = method.__self__._redis
+    r = redis.Redis()
+    value = r.get(function_name)
+    value = int(value.decode("utf-8"))
     method_name = method.__qualname__
     print(f"{method.__qualname__} was called {len(inputs)} times:")
-    inputs = redis_instance.lrange(f"{method_name}:inputs", 0, -1)
-    outputs = redis_instance.lrange(f"{method_name}:outputs", 0, -1)
+    inputs = r.lrange(f"{method_name}:inputs", 0, -1)
+    outputs = r.lrange(f"{method_name}:outputs", 0, -1)
     for inp, out in zip(inputs, outputs):
         inp = inp.decode("utf-8")
         out = out.decode("utf-8")
