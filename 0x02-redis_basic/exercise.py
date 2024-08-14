@@ -46,16 +46,15 @@ def replay(method: Callable):
     """
     r = redis.Redis()
     value = r.get(function_name)
-    try:
-        value = int(value.decode("utf-8"))
+    value = int(value.decode("utf-8"))
     method_name = method.__qualname__
-    print(f"{method.__qualname__} was called {len(inputs)} times:")
+    print(f"{method_name} was called {value} times:")
     inputs = r.lrange(f"{method_name}:inputs", 0, -1)
     outputs = r.lrange(f"{method_name}:outputs", 0, -1)
     for inp, out in zip(inputs, outputs):
         inp = inp.decode("utf-8")
         out = out.decode("utf-8")
-        print(f"{method.__qualname__}(*{inp}) -> {out}")
+        print(f"{method_name}(*{inp}) -> {out}")
 
 
 class Cache:
