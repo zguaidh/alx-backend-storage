@@ -40,7 +40,7 @@ def call_history(method: Callable) -> Callable:
 
 
 @staticmethod
-def replay(method: Callable) -> None:
+def replay(method: Callable):
     """
     Display the history of calls to a particular function.
     """
