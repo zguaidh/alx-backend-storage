@@ -12,7 +12,7 @@ import functools
 def count_calls(method: Callable) -> Callable:
     """
     Decorator to count the number of times a method is called
-    """ 
+    """
     key = method.__qualname__
 
     @functools.wraps(method)
@@ -20,6 +20,7 @@ def count_calls(method: Callable) -> Callable:
         self._redis.incr(key)
         return method(self, *args, **kwargs)
     return wrapper
+
 
 def call_history(method: Callable) -> Callable:
     """
@@ -29,13 +30,14 @@ def call_history(method: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         input_key = f"{method.__qualname__}:inputs"
         output_key = f"{method.__qualname__}:outputs"
-        
+
         self._redis.rpush(input_key, str(args))
         output = method(self, *args, **kwargs)
         self._redis.rpush(output_key, output)
-        
+
         return output
     return wrapper
+
 
 class Cache:
     """ Class for writing strings to Redis"""
@@ -54,7 +56,8 @@ class Cache:
         self._redis.set(id, data)
         return id
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, int, None]:
+    def get(self, key: str,
+            fn: Optional[Callable] = None) -> Union[str, int, None]:
         """
         Retrieve data from Redis and apply a conversion function
         """
@@ -84,11 +87,10 @@ class Cache:
         """
         redis_instance = method.__self__._redis
         method_name = method.__qualname__
-
         inputs = redis_instance.lrange(f"{method_name}:inputs", 0, -1)
         outputs = redis_instance.lrange(f"{method_name}:outputs", 0, -1)
-
-        print(f"{method_name} was called {len(inputs)} times:")
-
-        for input_, output in zip(inputs, outputs):
-            print(f"{method_name}(*{input_.decode('utf-8')}) -> {output.decode('utf-8')}")
+        print(f"{method.__qualname__} was called {len(inputs)} times:")
+        for inp, out in zip(inputs, outputs):
+            inp = inp.decode("utf-8")
+            out = out.decode("utf-8")
+            print(f"{method.__qualname__}(*{inp}) -> {out}")
