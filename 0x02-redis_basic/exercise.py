@@ -91,15 +91,8 @@ class Cache:
 
         print(f"{method.__qualname__} was called {len(inputs)} times:")
         for input, output in zip(inputs, outputs):
-            if input:
-                try:
-                    input = input.decode("utf-8")
-            else:
-                input = ""
-            
-            if output:
-                try:
-                    output = output.decode("utf-8")
-                else:
-                    output = ""
+            try:
+                input = input.decode("utf-8")
+            try:
+                output = output.decode("utf-8")
             print(f"{method.__qualname__}(*{inp}) -> {out}")
