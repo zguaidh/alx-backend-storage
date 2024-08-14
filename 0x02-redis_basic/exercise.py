@@ -44,6 +44,8 @@ def replay(method: Callable):
     """
     Display the history of calls to a particular function.
     """
+    if method is None or not hasattr(method, '__self__'):
+        return
     r = redis.Redis()
     value = r.get(function_name)
     value = int(value.decode("utf-8"))
