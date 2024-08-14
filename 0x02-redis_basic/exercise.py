@@ -12,8 +12,7 @@ import functools
 def count_calls(method: Callable) -> Callable:
     """
     Decorator to count the number of times a method is called
-    """
-    @functools.wraps(method)
+    """ 
     def wrapper(self, *args, **kwargs):
         key = f"{method.__qualname__}"
         self._redis.incr(key)
@@ -26,7 +25,6 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Generates a random key, store data in Redis using the random key
