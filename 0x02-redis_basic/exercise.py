@@ -4,7 +4,7 @@ Module for Cache class
 """
 
 
-from typing import Any
+from typing import Union
 import redis
 import uuid
 
@@ -15,7 +15,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: Any) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Generates a random key, store data in Redis using the random key
         return the key
