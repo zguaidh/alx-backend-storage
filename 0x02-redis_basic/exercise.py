@@ -40,7 +40,7 @@ class Cache:
         """
         Retrieve a string from Redis, decoded from bytes
         """
-        return self.get(key, fn=lambda d: d.decode('utf-8'))
+        return self.get(key, fn=str)
 
     def get_int(self, key: str) -> Optional[int]:
         """
