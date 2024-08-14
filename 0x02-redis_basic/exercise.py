@@ -82,17 +82,13 @@ class Cache:
         """
         Display the history of calls to a particular function.
         """
-        self = method.__self__
-        input_key = f"{method.__qualname__}:inputs"
-        output_key = f"{method.__qualname__}:outputs"
+        redis_instance = method.__self__._redis
+        method_name = method.__qualname__
 
-        inputs = self._redis.lrange(input_key, 0, -1)
-        outputs = self._redis.lrange(output_key, 0, -1)
+        inputs = redis_instance.lrange(f"{method_name}:inputs", 0, -1)
+        outputs = redis_instance.lrange(f"{method_name}:outputs", 0, -1)
 
-        print(f"{method.__qualname__} was called {len(inputs)} times:")
-        for inp, out in zip(inputs, outputs):
-            try:
-                inp = inp.decode("utf-8")
-            try:
-                out = out.decode("utf-8")
-            print(f"{method.__qualname__}(*{inp}) -> {out}")
+        print(f"{method_name} was called {len(inputs)} times:")
+
+        for input_, output in zip(inputs, outputs):
+            print(f"{method_name}(*{input_.decode('utf-8')}) -> {output.decode('utf-8')}")
