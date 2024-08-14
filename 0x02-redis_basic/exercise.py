@@ -46,9 +46,9 @@ def replay(method: Callable):
     """
     redis_instance = method.__self__._redis
     method_name = method.__qualname__
+    print(f"{method.__qualname__} was called {len(inputs)} times:")
     inputs = redis_instance.lrange(f"{method_name}:inputs", 0, -1)
     outputs = redis_instance.lrange(f"{method_name}:outputs", 0, -1)
-    print(f"{method.__qualname__} was called {len(inputs)} times:")
     for inp, out in zip(inputs, outputs):
         inp = inp.decode("utf-8")
         out = out.decode("utf-8")
