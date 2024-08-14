@@ -44,9 +44,7 @@ def replay(method: Callable):
     """
     Display the history of calls to a particular function.
     """
-    r = getattr(method.__self__, '_redis', None)
-    if not isinstance(redis_store, redis.Redis):
-        return
+    r = redis.Redis()
     value = r.get(function_name)
     value = int(value.decode("utf-8"))
     method_name = method.__qualname__
