@@ -6,7 +6,6 @@ Module for Cache class
 from typing import Callable, Union, Optional
 import redis
 import uuid
-import functools
 
 
 class Cache:
@@ -25,7 +24,7 @@ class Cache:
         self._redis.set(id, data)
         return id
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, int, bytes, float, None]:
+    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, int, None]:
         """
         Retrieve data from Redis and apply a conversion function
         """
