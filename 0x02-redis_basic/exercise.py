@@ -36,13 +36,13 @@ class Cache:
 
     def get_str(self, key: str) -> Optional[str]:
         """
-        Retrieve a string from Redis, decoded from bytes
+        Retrieve a str from Redis, decoded from bytes
         """
         return self.get(key, fn=str)
 
     def get_int(self, key: str) -> Optional[int]:
         """
-        Retrieve an integer from Redis
+        Retrieve an int from Redis
         """
         return self.get(key, fn=int)
 
