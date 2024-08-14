@@ -53,6 +53,7 @@ def replay(method: Callable):
     outputs = r.lrange(f"{method_name}:outputs", 0, -1)
     for inp, out in zip(inputs, outputs):
             inp = inp.decode("utf-8")
+            out = out.decode("utf-8")
         print(f"{method_name}(*{inp}) -> {out}")
 
 
