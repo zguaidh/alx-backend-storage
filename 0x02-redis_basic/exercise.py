@@ -90,9 +90,9 @@ class Cache:
         outputs = self._redis.lrange(output_key, 0, -1)
 
         print(f"{method.__qualname__} was called {len(inputs)} times:")
-        for input, output in zip(inputs, outputs):
+        for inp, out in zip(inputs, outputs):
             try:
-                input = input.decode("utf-8")
+                inp = inp.decode("utf-8")
             try:
-                output = output.decode("utf-8")
+                out = out.decode("utf-8")
             print(f"{method.__qualname__}(*{inp}) -> {out}")
