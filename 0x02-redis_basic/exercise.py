@@ -46,7 +46,8 @@ def replay(method: Callable):
     """
     r = redis.Redis()
     value = r.get(function_name)
-    value = int(value.decode("utf-8"))
+    try:
+        value = int(value.decode("utf-8"))
     method_name = method.__qualname__
     print(f"{method.__qualname__} was called {len(inputs)} times:")
     inputs = r.lrange(f"{method_name}:inputs", 0, -1)
